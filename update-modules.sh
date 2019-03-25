@@ -61,24 +61,26 @@ IFS=';'
 
 cat $mainDir/$modulesfilename | while read -A repo; do
 	echo "found github repos to clone $repo[1] $repo[2] $repo[3]"	
-	cd $envDiro
+	cd $envDir
 	if [ ! -d $envDir/$repo[2] ]; then
 		git clone $repo[1] $repo[2];
 		cd $envDir/$repo[2]; 
 		if [[ $#repo == 3 ]]; then
 			git checkout $repo[3];
 		fi
-	fi
-	
-	cd $envDir/$repo[2]; 
-
-	#update repo
-	updated=$(git fetch;git pull)
-	if [[ $updated != "Already up to date." ]]; then
-		sed -i '' 's/7\.0\.0\.0/7\.3\.0\.0/g' pom.xml
+		sed -i '' 's/7\.[0-9]\.[0-9]\.[0-9]/7\.3\.0\.0/g' pom.xml
 		#deploy repo to profile
 		mvn -P $profile -D skipTests clean install jahia:deploy;
 	else 
-		echo $updated	
-	fi
+		cd $envDir/$repo[2]; 
+		#update repo
+		updated=$(git fetch;git pull)
+		if [[ $updated != "Already up to date." ]]; then
+			sed -i '' 's/7\.[0-9]\.[0-9]\.[0-9]/7\.3\.0\.0/g' pom.xml
+			#deploy repo to profile
+			mvn -P $profile -D skipTests clean install jahia:deploy;
+		else 
+			echo $updated	
+		fi	
+	fi		
 done
