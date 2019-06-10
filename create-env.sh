@@ -41,7 +41,7 @@ while [[ "$1" != "" ]]; do
 								branch=$1
 						        ;;
         -m | --modules )    	shift
-								modules=$1
+								modulesfilename=$1
 								;;															
         -h | --help )           usage
                                 exit
