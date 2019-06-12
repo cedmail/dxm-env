@@ -144,7 +144,7 @@ cat $mainDir/$modulesfilename | while read -A repo; do
 
 	#update repo
 	git stash;git pull;
-	sed -i '' 's/7\.0\.0\.0/7\.3\.0\.0/g' pom.xml
+	sed -i '' 's/7\.0\.0\.0/7\.3\.0\.1/g' pom.xml
 	#deploy repo to profile
 	mvn -P $profile -D skipTests clean install jahia:deploy;
 done
